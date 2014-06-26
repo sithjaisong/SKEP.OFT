@@ -15,8 +15,8 @@ season | day | month | year | DVS | Sample | Nt |Np | Nlt| DH |SN |
 
 ### Systemic injuries
 season | day | month | year | DVS |  BB | HB | GSD |RSD | RTD| TSD |  
--------|-----|-------|------|-----||----|----|-----|----|----|-----|
-   1   |  1  | 2014  |  20  |20   ||10  |1   |  17 | 0  | 3  |  2  |
+-------|-----|-------|------|-----|-----|----|-----|----|----|-----|
+   1   |  1  | 2014  |  20  |20   |10   |1   |  17 | 0  | 3  |  2  |
 
 ### Weed
 season | day | month | year | DVS | rep  | WA | WB|  
