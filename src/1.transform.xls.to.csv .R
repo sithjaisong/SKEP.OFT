@@ -1,9 +1,14 @@
+####' Title     
+####' Created by        
+####' 
+####' The Name of file started with R and SKEPII, "season" (DS or WS), "Year" (2014),
+####'  
 
+### Loading the library 
 library(XLConnect)
 library(dplyr) # Data manipulation
 source("function.audpc.R")
 
-### Loading special funtions 
 trt <- c("FP", "PR", "RP", "GM21", "GM22")
 ntrt <- length(trt)
 for(i in (1: ntrt)){ 
@@ -77,7 +82,7 @@ for(i in (1: ntrt)){
         
         data.injsys4[is.na(data.injsys4)] <- 0 # fill the empty block with 0
         
-        injsys.total <- rbind(data.injsys1,data.injsys2, data.injsys3,data.injsys4)
+        injsys.total <- rbind(data.injsys1,data.injsys2, data.injsys3, data.injsys4)
         
         output <- paste("R.SKEPII.",trt[i],".DS2014.SJ.","sheet2",".csv", sep = "")
         
