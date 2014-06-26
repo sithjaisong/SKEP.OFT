@@ -13,22 +13,23 @@ season | day | month | year | DVS | Sample | Nt |Np | Nlt| DH |SN |
 -------|-----|-------|------|-----|--------|----|---|----|----|---|
    1   |  1  | 2014  |  20  |20   |   1    | 17 | 0 | 3  | 2  |4  |
 
-### Systemic injuries
+#### Systemic injuries
 season | day | month | year | DVS |  BB | HB | GSD |RSD | RTD| TSD |  
 -------|-----|-------|------|-----|-----|----|-----|----|----|-----|
    1   |  1  | 2014  |  20  |20   |10   |1   |  17 | 0  | 3  |  2  |
 
-### Weed
+#### Weed
 season | day | month | year | DVS | rep  | WA | WB|  
 -------|-----|-------|------|-----|------|----|---|
    1   |  1  | 2014  |  20  |20   | 1    |10  |10 |
    
-## Yield
+#### Yield
 season | day | month | year | DVS | rep | Sample| Y  | MC| 
 -------|-----|-------|------|-----|-----|-------|--- |---|
    1   |  1  | 2014  |  20  |20   | 1   |  A    |234 |14 |
    
-   
+###Here are the steps to folw the analysis
+
 * Step 1 Read Data in Excel file and Save the output in CSV file
 
 * Step 2 Combine Data of each treatments into catagorized data ( sheet 1, sheet2, sheet3, sheet4)
