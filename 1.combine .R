@@ -21,13 +21,23 @@ library(reshape)
 library(reshape2)
 #### End load libraries ####
 
-source("function.audpc.R") # where is this function from? Agricolae has an AUDPC function built in or you can write your own, but this one is not defined
+#### Load functions ####
+source("Functions/function.audpc.R")
+#### End load functions #####
 
 #### Specify variables, the treatment, replication and name of sheets we have ####
-
 trt <- c("FP", "PR", "RP", "GM21","GM22") # treatements
 rep <- c("R1", "R2", "R3", "R4") # replications
 sheet <- c("sheet1", "sheet2", "sheet3", "sheet4") # Excel Sheet
+
+country <- "Philippines"
+# country <- "Indonesia"
+# country <- "India"
+# country <- "Vietnam"
+# country <- "Thailand"
+
+#season <- "WS2013"
+season <- "DS2013"
 
 #trt <- c("GM21")
 #rep <- c("R1","R2", "R3", "R4")
@@ -48,9 +58,9 @@ nsheet <- length(sheet)
  
          for(j in 1: nrep){ 
                 
-         file <- paste("R.SKEPII.DS2014.",trt[i],".",rep[j],".xlsx", sep = "")  
+         file <- list.files(path = paste("/Users/asparks/Google Drive/SKEP2ProjectData/On Farm Trial/", country, "/", season, sep = ""), pattern = "R.SKEPII.DS2014[[:graph:]]+.xlsx$", full.names = TRUE)
          
-         data <- loadWorkbook(file)
+         data <- loadWorkbook(file[i])
          # sheet1
          data.sheet1 <- readWorksheet(data, sheet = sheet[1], startRow = 2, endCol = 41)
         
@@ -115,10 +125,10 @@ nsheet <- length(sheet)
          }   
  }
 #####---- Combine all data by sheet
- sheet1 <- do.call("rbind",data.all.sheet1)
- sheet2 <- do.call("rbind",data.all.sheet2)
- sheet3 <- do.call("rbind",data.all.sheet3)
- sheet4 <- do.call("rbind",data.all.sheet4)
+ sheet1 <- do.call("rbind", data.all.sheet1)
+ sheet2 <- do.call("rbind", data.all.sheet2)
+ sheet3 <- do.call("rbind", data.all.sheet3)
+ sheet4 <- do.call("rbind", data.all.sheet4)
 
 #####--- Save the data for use in the next analysis
 save(sheet1, sheet2, sheet3, sheet4, file = "alldata.RData")
