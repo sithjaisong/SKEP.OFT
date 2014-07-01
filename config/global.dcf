@@ -1,9 +1,0 @@
-data_loading: off
-cache_loading: on
-recursive_loading: off
-munging: off
-logging: off
-load_libraries: on
-libraries: reshape, plyr, ggplot2, stringr, lubridate, dplyr, XLConnect
-as_factors: on
-data_tables: off
