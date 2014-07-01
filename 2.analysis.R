@@ -17,35 +17,35 @@
 
 ##### Define output name
 
-output.name <- " R.DS2014.OFT.csv"
+output.name <- " R.DS2014.OFT.csv" # name your output
 
 ##### Load data
-lnames <- load(file = "alldata.RData")
+lnames <- load(file = "alldata.RData") # load RData from the previous step
 
 
 ######----- Water status transformation from scale to percent 
-if(sheet1$WS == 1 & sheet1$DVS == "100"){ 
+if(sheet1$WS == 1 & sheet1$DVS == "100"){  # if WS = 1 at harvest stage
         sheet1$WSC <- 0
 } else {
-        if(sheet1$WS == 2 & sheet1$DVS == "100"){
+        if(sheet1$WS == 2 & sheet1$DVS == "100"){ # if WS = 2 at harvest stage
                 sheet1$WSC <- 0       
         } else {
-                if(sheet1$WS == 3 & sheet1$DVS == c("70", "80" ,"90", "100")){
+                if(sheet1$WS == 3 & sheet1$DVS == c("70", "80" ,"90", "100")){ # if WS = 3 at 
                         sheet1$WSC <- 0
                 } else {
-                        if(sheet1$WS == 4 & sheet1$DVS == "100"){
+                        if(sheet1$WS == 4 & sheet1$DVS == "100"){ # if WS = 4 at harvest stage
                                 sheet1$WSC <- 0
                         } else {
-                                if(sheet1$WS == 5 & sheet1$DVS == c("70", "80" ,"90", "100")){
+                                if(sheet1$WS == 5 & sheet1$DVS == c("70", "80" ,"90", "100")){ # if WS = 5 at 
                                         sheet1$WSC <- 0
                                 } else { 
-                                        if(sheet1$WS == 6 & sheet1$DVS =="100"){
+                                        if(sheet1$WS == 6 & sheet1$DVS =="100"){ # if WS = 6 at harvest stage
                                                 sheet1$WSC <- 0
                                         } else {
-                                                if( sheet1$WS == 7){
+                                                if( sheet1$WS == 7){ # if WS = 7 at any stage
                                                         sheet1$WSC <- 0 
                                                 } else {
-                                                        if(sheet1$WS == 8 & sheet1$DVS == c("70", "80" ,"90", "100")){
+                                                        if(sheet1$WS == 8 & sheet1$DVS == c("70", "80" ,"90", "100")){ # if WS =8 at 
                                                                 sheet1$WSC <- 0
                                                         } else {
                                                                 if (sheet1$WS == 8 & sheet1$DVS == c( "10", "20", "30", "40", "50", "60")){
@@ -68,9 +68,9 @@ if(sheet1$WS == 1 & sheet1$DVS == "100"){
 
 ######----- Analysis sheet 1 leave and tiller injuries-----######
 sheet1 <- mutate(sheet1,   
-                         Nlh = Nt*Nlt,
+                         Nlh = Nt*Nlt, # Number of leave = number of tiller * number of leave per tiller
                          # tiller injuries
-                         DH.100 = (DH/Nt)*100, 
+                         DH.100 = (DH/Nt)*100, # Percent of Dead Heart in on hill is number tiller demaged by  dead heart divide by number of tiller *100 
                          RT.100= RT/Nt*100, # Percent of Rat damage in one hill
                          SN.100= SN/Nt*100, # Percent of Snail damage in one hill
                          RB.100= RB/Nt*100, # Percent of Rice Bug injuries in one hill
@@ -98,7 +98,7 @@ sheet1 <- mutate(sheet1,
                          RS.100= RS/Nlh*100 # Percent of Red stripe in one hill
 )
 
-sheet1 <- group_by(sheet1,season, year ,treatment, rep, DVS)
+sheet1 <- group_by(sheet1, season, year ,treatment, rep, DVS)
 
 ## compute mean from 12 samplings
 com.sheet1 <- summarise(sheet1,
