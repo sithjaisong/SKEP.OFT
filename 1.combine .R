@@ -58,7 +58,7 @@ nsheet <- length(sheet)
  
          for(j in 1: nrep){ 
                 
-         file <- list.files(path = paste("/Users/asparks/Google Drive/SKEP2ProjectData/On Farm Trial/", country, "/", season, sep = ""), pattern = "R.SKEPII.DS2014[[:graph:]]+.xlsx$", full.names = TRUE)
+         file <- list.files(path = paste("~/Google Drive/SKEP2ProjectData/On Farm Trial/", country, "/", season, sep = ""), pattern = "R.SKEPII.DS2014[[:graph:]]+.xlsx$", full.names = TRUE)
          
          data <- loadWorkbook(file[i])
          # sheet1
