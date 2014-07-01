@@ -1,30 +1,33 @@
-###' Titile  :          The script for combine onfarm trial data 
-###'                    of SKEP project
-###' Designed By        Sith Jaisong
-###'                    Plant Disease Management team
-###'                    CESD, IRRI           
-###' Purpose            combine data from excel file to csv file
-###' Input file         exel file in each replication and treamrnt
-###' Output             data frame named sheet1, sheet2, sheet3 and sheet4
-###'                    sheet 1 is data of production situation and
-###'                               leave and tiller injuies
-###'                    sheet 2 is the systemic injuries
-###'                    sheet 3 is the seed infestration
-###'                    sheet 4 is the yield samples
-###' Date of modified   30 June 2014
+##############################################################################
+# titile        : 1.combine.R;
+# purpose       : combine data from excel file to csv file;
+# producer      : Sith Jaisong and A. H. Sparks;
+#                 Plant Disease Management team
+#                 CESD, IRRI;
+# last update   : In Los Baños, 1 Jul. 2014;
+# inputs        : Microsoft Excel file in each replication and treatment;
+# outputs       : data frame named sheet1, sheet2, sheet3 and sheet4
+# remarks 1     : sheet 1 is data of production situation and leaf and tiller injuries
+#                 sheet 2 is the systemic injuries
+#                 sheet 3 is the seed infestation
+#                 sheet 4 is the yield samples;;
+# Licence:      : GPL2;
+##############################################################################
 
-## load library 
+#### Begin load libraries ####
 library(XLConnect)
 library(dplyr)
 library(reshape)
 library(reshape2)
-source("function.audpc.R")
+#### End load libraries ####
 
-### Specify the the treatment , replication and name of sheets we have
+source("function.audpc.R") # where is this function from? Agricolae has an AUDPC function built in or you can write your own, but this one is not defined
 
-trt <- c("FP", "PR", "RP", "GM21","GM22")
-rep <- c("R1", "R2", "R3", "R4")
-sheet <- c("sheet1", "sheet2", "sheet3", "sheet4")
+#### Specify variables, the treatment, replication and name of sheets we have ####
+
+trt <- c("FP", "PR", "RP", "GM21","GM22") # treatements
+rep <- c("R1", "R2", "R3", "R4") # replications
+sheet <- c("sheet1", "sheet2", "sheet3", "sheet4") # Excel Sheet
 
 #trt <- c("GM21")
 #rep <- c("R1","R2", "R3", "R4")
@@ -49,10 +52,7 @@ nsheet <- length(sheet)
          
          data <- loadWorkbook(file)
          # sheet1
-         data.sheet1<- readWorksheet(data,                                                                                            
-                                     sheet= sheet[1],
-                                     startRow=  2,
-                                     endCol= 41)
+         data.sheet1 <- readWorksheet(data, sheet = sheet[1], startRow = 2, endCol = 41)
         
          data.sheet1[is.na(data.sheet1)] <- 0                            
          if( i == 1 )
@@ -67,9 +67,8 @@ nsheet <- length(sheet)
                  data.all.sheet1[[16+j]] <- data.sheet1
                           
          # sheet2
-         data.sheet2<- readWorksheet(data, 
-                                      sheet= sheet[2],
-                                      startRow=  2)
+         data.sheet2<- readWorksheet(data, sheet = sheet[2],
+                                      startRow =  2)
          data.sheet2[is.na(data.sheet2)] <- 0                            
          if( i == 1 )
                  data.all.sheet2[[j]] <- data.sheet2 
@@ -124,4 +123,4 @@ nsheet <- length(sheet)
 #####--- Save the data for use in the next analysis
 save(sheet1, sheet2, sheet3, sheet4, file = "alldata.RData")
  
-# eos     
+# eos
