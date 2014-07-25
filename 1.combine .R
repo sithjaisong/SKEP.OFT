@@ -30,14 +30,19 @@ trt <- c("FP", "PR", "RP", "GM21","GM22") # treatements
 rep <- c("R1", "R2", "R3", "R4") # replications
 sheet <- c("sheet1", "sheet2", "sheet3", "sheet4") # Excel Sheet
 
+# Select the country you are inquring
 country <- "Philippines"
-# country <- "Indonesia"
-# country <- "India"
-# country <- "Vietnam"
-# country <- "Thailand"
+# country <- "Indonesia" # not available
+# country <- "India" # not available
+# country <- "Vietnam" # not available
+# country <- "Thailand" # not available
 
 #season <- "WS2013"
 season <- "DS2013"
+#season <- "WS2014"
+#season <- "DS2014"
+#season <- "WS2015"
+#season <- "DS2014"
 
 #trt <- c("GM21")
 #rep <- c("R1","R2", "R3", "R4")
@@ -58,10 +63,17 @@ nsheet <- length(sheet)
  
          for(j in 1: nrep){ 
                 
-         file <- list.files(path = paste("/Users/asparks/Google Drive/SKEP2ProjectData/On Farm Trial/", country, "/", season, sep = ""), pattern = "R.SKEPII.DS2014[[:graph:]]+.xlsx$", full.names = TRUE)
+         file <- list.files(path = paste("/Users/iSith/Google Drive/SKEP2ProjectData/On Farm Trial/",
+                                         country,
+                                         "/",
+                                         season,
+                                         sep = ""),
+                            pattern = "R.SKEPII.DS2013[[:graph:]]+.xlsx$",
+                            full.names = TRUE)
          
-         data <- loadWorkbook(file[i])
-         # sheet1
+         data <- loadWorkbook(file[i]) # load excel file 
+        ## one excel file composed of 4 sheets of data
+        # load data sheet 1 the injuries on leave and tiller or hill ,combine and merge all the data
          data.sheet1 <- readWorksheet(data, sheet = sheet[1], startRow = 2, endCol = 41)
         
          data.sheet1[is.na(data.sheet1)] <- 0                            
@@ -76,7 +88,7 @@ nsheet <- length(sheet)
          if( i == 5 )
                  data.all.sheet1[[16+j]] <- data.sheet1
                           
-         # sheet2
+         # load data sheet2 the systemic injuires such as viral disease , and hopperburn caused by brown planthopper , save as list
          data.sheet2<- readWorksheet(data, sheet = sheet[2],
                                       startRow =  2)
          data.sheet2[is.na(data.sheet2)] <- 0                            
@@ -91,7 +103,7 @@ nsheet <- length(sheet)
          if( i == 5 )
                  data.all.sheet2[[16+j]] <- data.sheet2 
          
-         # sheet3
+         # load data sheet3 the weed infastration and save as list
          data.sheet3<- readWorksheet(data, 
                                      sheet= sheet[3],
                                      startRow=  2)
@@ -107,7 +119,7 @@ nsheet <- length(sheet)
          if( i == 5 )
                  data.all.sheet3[[16+j]] <- data.sheet3
          
-         # sheet4
+         # load data sheet4 the yield save as list
          data.sheet4<- readWorksheet(data, 
                                      sheet= sheet[4],
                                      startRow=  2)
@@ -125,10 +137,10 @@ nsheet <- length(sheet)
          }   
  }
 #####---- Combine all data by sheet
- sheet1 <- do.call("rbind", data.all.sheet1)
- sheet2 <- do.call("rbind", data.all.sheet2)
- sheet3 <- do.call("rbind", data.all.sheet3)
- sheet4 <- do.call("rbind", data.all.sheet4)
+ sheet1 <- do.call("rbind", data.all.sheet1) # merge the list in one 
+ sheet2 <- do.call("rbind", data.all.sheet2) # merge the list in one 
+ sheet3 <- do.call("rbind", data.all.sheet3) # merge the list in one 
+ sheet4 <- do.call("rbind", data.all.sheet4) # merge the list in one 
 
 #####--- Save the data for use in the next analysis
 save(sheet1, sheet2, sheet3, sheet4, file = "alldata.RData")
