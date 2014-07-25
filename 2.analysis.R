@@ -1,27 +1,31 @@
-###' Titile  :          The script for computation of onfarm trial data 
-###'                    of SKEP project
-###' Designed By        Sith Jaisong
-###'                    Plant Disease Management team
-###'                    CESD, IRRI           
-###' Purpose            combine data from excel file to csv file
-###' Input file         data frame named
-###'                    sheet1 : leave and tiller injuires 
-###'                    sheet2 : systemic injuries
-###'                    sheet3 : weed infastration
-###'                    sheet4 : yield 
-###' Output             data frame named total
-###'                    alldata.RData
-###'                    CSV file and R.SKEP.DS2014.OFT.csv 
-###'                    sheet 1 is data of production situation and
-###' Date of modified   1 July 2014
+##############################################################################
+# titile        : 1.combine.R;
+# purpose       : combine data from excel file to csv file;
+# producer      : Sith Jaisong and A. H. Sparks;
+#                 Plant Disease Management team
+#                 CESD, IRRI;
+# last update   : In Los Baños, 1 Jul. 2014;
+# inputs        : data frame named  sheet1 the data of leave and tiller injuries of all treatments
+#                                   sheet2 the data of systemic injuries of all treatments
+#                                   sheet3 the data of weed infastration of all tratments
+#                                   sheet4 the data of yield of all treatments
+# outputs       : transfrom the raw data of each variables to the right unit
+#                 such as the the number of leaf damaged by browns spot to AUDPC
+#                         the yield kg per 5 m2 to ton per ha
+# remarks 1     : 
+# Licence:      : GPL2;
+##############################################################################
 
 ##### Define output name
+output.name <- " R.DS2013.OFT.csv" # name your output
 
-output.name <- " R.DS2014.OFT.csv" # name your output
-
-##### Load data
+##### Load data #####
 lnames <- load(file = "alldata.RData") # load RData from the previous step
+# End load data #
 
+#### Load functions ####
+source("Functions/function.audpc.R")
+# End load functions #
 
 ######----- Water status transformation from scale to percent 
 if(sheet1$WS == 1 & sheet1$DVS == "100"){  # if WS = 1 at harvest stage
@@ -67,72 +71,68 @@ if(sheet1$WS == 1 & sheet1$DVS == "100"){  # if WS = 1 at harvest stage
 
 
 ######----- Analysis sheet 1 leave and tiller injuries-----######
-sheet1 <- mutate(sheet1,   
-                         Nlh = Nt*Nlt, # Number of leave = number of tiller * number of leave per tiller
+
+## add more 
+sum.sheet1 <- sheet1 %.% 
+  # add the new column to store the variables converted to percent            
+  mutate(Nlh = Nt*Nlt, # Number of leave = number of tiller * number of leave per tiller
                          # tiller injuries
-                         DH.100 = (DH/Nt)*100, # Percent of Dead Heart in on hill is number tiller demaged by  dead heart divide by number of tiller *100 
-                         RT.100= RT/Nt*100, # Percent of Rat damage in one hill
-                         SN.100= SN/Nt*100, # Percent of Snail damage in one hill
-                         RB.100= RB/Nt*100, # Percent of Rice Bug injuries in one hill
-                         SS.100= SS/Nt*100, # Percent of Silvershoot in one hill
-                         WH.100= WH/Nt*100, # Percent of Whitehead in one hill
-                         PM.100= PM/Nt*100, # Percent of panicle mite in one hill
-                         DP.100 = DP/Nt*100, # Percent of Dirty Panicle in one hill
-                         FSm.100= FSm/Nt*100, # Percent of False smut in one hill
-                         NB.100= NB/Nt*100, # Percent of Neck Blast in one hill
-                         ShB.100= ShB/Nt*100, # Percent of Shealth Blight injuries in one hill
-                         ShR.100= ShR/Nt*100, # Percent of Shealth Rot in one hill
+                         DH.percent = (DH/Nt)*100, # Percent of Dead Heart in on hill is number tiller demaged by  dead heart divide by number of tiller *100 
+                         RT.percent = RT/Nt*100, # Percent of Rat damage in one hill
+                         SN.percent = SN/Nt*100, # Percent of Snail damage in one hill
+                         RB.percent = RB/Nt*100, # Percent of Rice Bug injuries in one hill
+                         SS.percent = SS/Nt*100, # Percent of Silvershoot in one hill
+                         WH.percent = WH/Nt*100, # Percent of Whitehead in one hill
+                         PM.percent = PM/Nt*100, # Percent of panicle mite in one hill
+                         DP.percent = DP/Nt*100, # Percent of Dirty Panicle in one hill
+                         FSm.percent = FSm/Nt*100, # Percent of False smut in one hill
+                         NB.percent = NB/Nt*100, # Percent of Neck Blast in one hill
+                         ShB.percent = ShB/Nt*100, # Percent of Shealth Blight injuries in one hill
+                         ShR.percent = ShR/Nt*100, # Percent of Shealth Rot in one hill
                          # leave injuries
-                         LF.100 = LF/Nlh*100, # Percent of Leaffolder in one hill
-                         LM.100= LM/Nlh*100, # Percent of Leaf miner in one hill
-                         RH.100= RH/Nlh*100, # Percent of Rice hispa in one hill
-                         WM.100= WM/Nlh*100, # Percent of Whorl maggot injuries in one hill
-                         Defo.100= Defo/Nlh*100, # Percent of Defoliator in one hill
-                         Thrip.100= Thrip/Nlh*100, # Percent of Thrip in one hill
-                         BLB.100= BLB/Nlh*100, # Percent of Bacterial leaf Blight in one hill
-                         BLS.100= BLS/Nlh*100, # Percent of Bacterial leaf streak in one hill
-                         BS.100= BS/Nlh*100, # Percent of Brown Spot in one hill
-                         LB.100= LB/Nlh*100, # Percent of leaf Blight in one hill
-                         LS.100= LS/Nlh*100, # Percent of leaf scald in one hill
-                         NBS.100= NBS/Nlh*100, # Percent of Narrow brown spot in one hill
-                         RS.100= RS/Nlh*100 # Percent of Red stripe in one hill
-)
+                         LF.percent = LF/Nlh*100, # Percent of Leaffolder in one hill
+                         LM.percent = LM/Nlh*100, # Percent of Leaf miner in one hill
+                         RH.percent = RH/Nlh*100, # Percent of Rice hispa in one hill
+                         WM.percent = WM/Nlh*100, # Percent of Whorl maggot injuries in one hill
+                         Defo.percent = Defo/Nlh*100, # Percent of Defoliator in one hill
+                         Thrip.percent = Thrip/Nlh*100, # Percent of Thrip in one hill
+                         BLB.percent = BLB/Nlh*100, # Percent of Bacterial leaf Blight in one hill
+                         BLS.percent = BLS/Nlh*100, # Percent of Bacterial leaf streak in one hill
+                         BS.percent = BS/Nlh*100, # Percent of Brown Spot in one hill
+                         LB.percent = LB/Nlh*100, # Percent of leaf Blight in one hill
+                         LS.percent = LS/Nlh*100, # Percent of leaf scald in one hill
+                         NBS.percent = NBS/Nlh*100, # Percent of Narrow brown spot in one hill
+                         RS.percent = RS/Nlh*100 # Percent of Red stripe in one hill
+                          ) %.%
+  # group the variable such as season, year , teatment, rep and DVS
+  group_by( season, year ,treatment, rep, DVS) %.%
+  
+  
+  summarise(m.LF = mean(LF.percent), # mean within DVS which is following the designed group
+            m.LM = mean(LM.percent),
+            m.RH = mean(RH.percent),
+            m.WM = mean(WM.percent),
+            m.Defo = mean(Defo.percent),
+            m.BLB = mean(BLB.percent),
+            m.BLS = mean(BLS.percent),
+            m.LB = mean(LB.percent),
+            m.LS = mean(LS.percent),
+            m.NBS = mean(NBS.percent),
+            m.RS = mean(RS.percent)) %.%
 
-sheet1 <- group_by(sheet1, season, year ,treatment, rep, DVS)
-
-## compute mean from 12 samplings
-com.sheet1 <- summarise(sheet1,
-                           m.LF = mean(LF.100),
-                           m.LM = mean(LM.100),
-                           m.RH = mean(RH.100),
-                           m.WM = mean(WM.100),
-                           m.Defo = mean(Defo.100),
-                           m.BLB = mean(BLB.100),
-                           m.BLS = mean(BLS.100),
-                           m.LB = mean(LB.100),
-                           m.LS = mean(LS.100),
-                           m.NBS = mean(NBS.100),
-                           m.RS = mean(RS.100)
-)
-
-
-### AUDPC # the functions from the agricolae is bugs for this format
-
-com.sheet1 <- group_by(com.sheet1,season, year, treatment, rep)
-
-output.sheet1 <- summarise(com.sheet1,
-                       AUDPC.LF = audpc(m.LF, DVS),
-                       AUDPC.LM = audpc(m.LM, DVS),
-                       AUDPC.RH = audpc(m.RH, DVS),
-                       AUDPC.WM = audpc(m.WM, DVS),
-                       AUDPC.Defo = audpc(m.Defo, DVS),
-                       AUDPC.BLB = audpc(m.BLB, DVS),
-                       AUDPC.BLS = audpc(m.BLS, DVS),
-                       AUDPC.LB = audpc(m.LB, DVS),
-                       AUDPC.LS = audpc(m.LS, DVS),
-                       AUDPC.NBS = audpc(m.NBS, DVS),
-                       AUDPC.RS = audpc(m.RS, DVS)
-)
+  ### AUDPC # the functions from the agricolae is bugs for this format
+# this part is to apply the function to computate the audpc of eheach variables 
+  summarise(LF.audpc = audpc(m.LF, DVS),
+            LM.audpc = audpc(m.LM, DVS),
+            RH.audpc = audpc(m.RH, DVS),
+            WM.audpc = audpc(m.WM, DVS),
+            Defo.audpc = audpc(m.Defo, DVS),
+            BLB.audpc = audpc(m.BLB, DVS),
+            BLS.audpc = audpc(m.BLS, DVS),
+            LB.audpc = audpc(m.LB, DVS),
+            LS.audpc = audpc(m.LS, DVS),
+            NBS.audpc = audpc(m.NBS, DVS),
+            RS.audpc = audpc(m.RS, DVS))
 
 
 ######----- Analysis sheet 2 systemic injuies-----######
@@ -177,11 +177,10 @@ output.sheet3 <- summarise(com.sheet3,
                             )
 #####----- Analysis sheet 4 Yield Evalustion-----#####
 
-sheet4 <- mutate(sheet4, m.Y = (Y/MC)*14, yield.kg.ha = m.Y*2000)
-
-sheet4 <- group_by(sheet4,season, year, treatment, rep)
-
-output.sheet4 <- summarise(sheet4, ykh.m = mean(ykh))
+sum.sheet4 <- sheet4 %.% 
+  mutate(m.Y = (Y/MC)*14, yield.kg.ha = m.Y*2000) %.%
+  group_by(sheet4,season, year, treatment, rep) %.% 
+  summarise(sheet4, ykh.m = mean(ykh))
 
 
 ### The combine output
