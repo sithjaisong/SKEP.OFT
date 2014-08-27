@@ -63,6 +63,7 @@ nsheet <- length(sheet)
  
          for(j in 1: nrep){ 
                 
+<<<<<<< HEAD
          file <- list.files(path = paste("/Users/iSith/Google Drive/SKEP2ProjectData/On Farm Trial/",
                                          country,
                                          "/",
@@ -70,6 +71,9 @@ nsheet <- length(sheet)
                                          sep = ""),
                             pattern = "R.SKEPII.DS2013[[:graph:]]+.xlsx$",
                             full.names = TRUE)
+=======
+         file <- list.files(path = paste("~/Google Drive/SKEP2ProjectData/On Farm Trial/", country, "/", season, sep = ""), pattern = "R.SKEPII.DS2014[[:graph:]]+.xlsx$", full.names = TRUE)
+>>>>>>> FETCH_HEAD
          
          data <- loadWorkbook(file[i]) # load excel file 
         ## one excel file composed of 4 sheets of data

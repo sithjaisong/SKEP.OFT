@@ -20,7 +20,7 @@
 output.name <- " R.DS2013.OFT.csv" # name your output
 
 ##### Load data #####
-lnames <- load(file = "alldata.RData") # load RData from the previous step
+lnames <- load(file = "alldata.RData") # load RData from the previous step (1.combine.R)
 # End load data #
 
 #### Load functions ####
@@ -28,6 +28,22 @@ source("Functions/function.audpc.R")
 # End load functions #
 
 ######----- Water status transformation from scale to percent 
+# Water status condition : this formula will turn WSC to -1,0 and 1 
+# following the water level and soil type and rice stage
+# 1 : No standing water and soil dry and hard
+# 2 : No standing water and soil moist and hard
+# 3 : No standing water and soil moist and soft
+#'4 : No standing water and soil wet and hard
+#'5 : No stainding water and soil wet and soft
+#'6 : water less than 5 cm and soil hard
+#'7 : water less than 5 cm and soil soft
+#'8 : water  between 5 and 15 cm , and soil hard
+#'9 : water  between 5 and 15 cm, and soil soft
+#'10 : water higher than 15 cm, and soil hard
+#'11 : water higher than 15 cm, and soil soft
+#'
+##########
+
 if(sheet1$WS == 1 & sheet1$DVS == "100"){  # if WS = 1 at harvest stage
         sheet1$WSC <- 0
 } else {
@@ -40,31 +56,31 @@ if(sheet1$WS == 1 & sheet1$DVS == "100"){  # if WS = 1 at harvest stage
                         if(sheet1$WS == 4 & sheet1$DVS == "100"){ # if WS = 4 at harvest stage
                                 sheet1$WSC <- 0
                         } else {
-                                if(sheet1$WS == 5 & sheet1$DVS == c("70", "80" ,"90", "100")){ # if WS = 5 at 
+                                if(sheet1$WS == 5 & sheet1$DVS == c("70", "80" ,"90", "100")){ # if WS = 5 at DVS = 70 , 80 , 90, 100  | WSC = 0
                                         sheet1$WSC <- 0
                                 } else { 
-                                        if(sheet1$WS == 6 & sheet1$DVS =="100"){ # if WS = 6 at harvest stage
+                                        if(sheet1$WS == 6 & sheet1$DVS =="100"){ # if WS = 6 at harvest stage | WSC = 0
                                                 sheet1$WSC <- 0
                                         } else {
-                                                if( sheet1$WS == 7){ # if WS = 7 at any stage
+                                                if( sheet1$WS == 7){ # if WS = 7 at any stage | WSC = 0
                                                         sheet1$WSC <- 0 
                                                 } else {
-                                                        if(sheet1$WS == 8 & sheet1$DVS == c("70", "80" ,"90", "100")){ # if WS =8 at 
-                                                                sheet1$WSC <- 0
+                                                        if(sheet1$WS == 8 & sheet1$DVS == c("70", "80" ,"90", "100")){ # if WS =8 at DVS = 70 , 80 , 90, 100 | WSC = 0
+                                                                sheet1$WSC <- 0 
                                                         } else {
-                                                                if (sheet1$WS == 8 & sheet1$DVS == c( "10", "20", "30", "40", "50", "60")){
+                                                                if (sheet1$WS == 8 & sheet1$DVS == c( "10", "20", "30", "40", "50", "60")){ # if WS =8 at DVS = 10 , 20 , 30, 40, 50, 60 | WSC = 1
                                                                         sheet1$WSC <- 1
                                                                 } else {
-                                                                        if (sheet1$WS == 9){
+                                                                        if (sheet1$WS == 9){ # if WS = 9 at any stage | WSC = 0
                                                                                 sheet1$WSC <- 0
                                                                         } else {
-                                                                                if (sheet1$WS == 10){
+                                                                                if (sheet1$WS == 10){ # if WS = 10 at any stage | WSC = 1
                                                                                         sheet1$WSC <- 1
                                                                                 } else {
-                                                                                        if( sheet1$WS == 11 & sheet1$DVS == c("30", "40", "50", "60")){
+                                                                                        if( sheet1$WS == 11 & sheet1$DVS == c("30", "40", "50", "60")){ # if WS = 11 at DVS = 30, 40, 50, 60 | WSC = 0
                                                                                                 sheet1$WSC <- 0
                                                                                         } else { 
-                                                                                                if( sheet1$WS == 11 & sheet1$DVS == c("10", "20", "70", "80", "90", "100")){
+                                                                                                if( sheet1$WS == 11 & sheet1$DVS == c("10", "20", "70", "80", "90", "100")){ # if WS = 11 at DVS = 10, 20, 70, 80 | WSC = 1
                                                                                                         sheet1$WSC <- 1
                                                                                                 } else { sheet1$WSC <- -1}
                                                                                         }}}}}}}}}}}}
@@ -105,7 +121,7 @@ sum.sheet1 <- sheet1 %.%
                          RS.percent = RS/Nlh*100 # Percent of Red stripe in one hill
                           ) %.%
   # group the variable such as season, year , teatment, rep and DVS
-  group_by( season, year ,treatment, rep, DVS) %.%
+  group_by(season, year ,treatment, rep, DVS) %.%
   
   
   summarise(m.LF = mean(LF.percent), # mean within DVS which is following the designed group
@@ -138,19 +154,25 @@ sum.sheet1 <- sheet1 %.%
 ######----- Analysis sheet 2 systemic injuies-----######
 # select the maximum percent of mean along the time of experiment
 
-sheet2 <- group_by(sheet2, season, year ,treatment, rep)
-
-output.sheet2 <- summarise(sheet2, 
-                     xBB = max(mean(BB)), 
-                     xHB = max(mean(HB)),
-                     xGSD = max(mean(GSD)), 
-                     xRSD = max(mean(RSD)), 
-                     xRTV = max(mean(YSD)))
-
+sum.sheet2 <- sheet2 %.% 
+  group_by(season, year ,treatment, rep) %.%
+  summarise( xBB = max(mean(BB)),
+             xHB = max(mean(HB)),
+             xGSD = max(mean(GSD)),
+             xRSD = max(mean(RSD)), 
+             xRTV = max(mean(YSD))
+            )
 
 #####----- Analysis sheet 3 weed infastration-----#####
 #Calcuation for Weed sheet3, especially WA and WB
 # tranform from scale to percent
+#' weed class 0 is 0 percent
+#' weed class 1 is up to 10 percent, 
+#' weed class 2 is 10 to 30 percent
+#' weed class 3 is 30 to 60 percent
+#' weed class 4 is 60 to 100 percent 
+##########################################################
+
 sheet3[,10:11][sheet3[,10:11] =="0"] <- 0
 sheet3[,10:11][sheet3[,10:11] =="1"] <- 5
 sheet3[,10:11][sheet3[,10:11] =="2"] <- 20
@@ -158,33 +180,30 @@ sheet3[,10:11][sheet3[,10:11] =="3"] <- 45
 sheet3[,10:11][sheet3[,10:11] =="4"] <- 80
 
 ###
-sheet3 <- group_by(sheet3, season, year ,treatment, rep, DVS)
-
+sum.sheet3 <- sheet3 %.%
+  group_by(season, year ,treatment, rep, DVS)%.%
 # find mean 
-sheet3 <- mutate(sheet3,
-                      m.WA = mean(WA),
-                      m.WB = mean(WB),
-                      m.BLW = mean(BLW),
-                      m.G = mean(G),
-                      m.S = mean(S),
-                      m.SW = mean(SW))
+mutate(m.WA = mean(WA),
+      m.WB = mean(WB),
+      m.BLW = mean(BLW),
+      m.G = mean(G),
+      m.S = mean(S),
+      m.SW = mean(SW))%.%
+group_by(season, year, treatment, rep)%.%
+summarise( x.WA = audpc(m.WA, DVS),
+          x.WB = audpc(m.WB, DVS)
+          )
 
-com.sheet3 <- group_by(sheet3,season, year, treatment, rep)
-
-output.sheet3 <- summarise(com.sheet3, 
-                            x.WA = audpc(m.WA, DVS),
-                            x.WB = audpc(m.WB, DVS)
-                            )
 #####----- Analysis sheet 4 Yield Evalustion-----#####
 
 sum.sheet4 <- sheet4 %.% 
   mutate(m.Y = (Y/MC)*14, yield.kg.ha = m.Y*2000) %.%
-  group_by(sheet4,season, year, treatment, rep) %.% 
-  summarise(sheet4, ykh.m = mean(ykh))
+  group_by(season, year, treatment, rep) %.% 
+  summarise( mean.ykh = mean(yield.kg.ha))
 
 
 ### The combine output
-output.list <- list(output.sheet1, output.sheet2, output.sheet3 , output.sheet4)
+output.list <- list(sum.sheet1, sum.sheet2, sum.sheet3 , sum.sheet4)
 summary.data <- merge_recurse(output.list)
 write.csv(summary.data, file = output.name)
 
