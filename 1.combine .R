@@ -37,28 +37,29 @@ country <- "Philippines"
 # country <- "Vietnam" # not available
 # country <- "Thailand" # not available
 
-#season <- "WS2013"
+#season <- "WS2013" # not available
 season <- "DS2013"
-#season <- "WS2014"
-#season <- "DS2014"
-#season <- "WS2015"
-#season <- "DS2014"
+#season <- "WS2014" # not available
+#season <- "DS2014" # not available
+#season <- "WS2015" # not avialble
+#season <- "DS2014" # not available
 
 #trt <- c("GM21")
 #rep <- c("R1","R2", "R3", "R4")
 #sheet <- c("sheet4")
 
-ntrt <- length(trt)
-nrep <- length(rep)
-nsheet <- length(sheet)
+ntrt <- length(trt) # number of tretment
+nrep <- length(rep) # number of replication
+nsheet <- length(sheet) # number of data sheet in one file
                 
 ###-----------------------------------------------------               
  
- data.all.sheet1 <- list()
- data.all.sheet2 <- list()
- data.all.sheet3 <- list()
- data.all.sheet4 <- list()
+ data.all.sheet1 <- list() # strore the data sheet1 of all file in the lists
+ data.all.sheet2 <- list() # strore the data sheet2 of all file in the lists
+ data.all.sheet3 <- list() # strore the data sheet3 of all file in the lists
+ data.all.sheet4 <- list() # strore the data sheet4 of all file in the lists
 
+# Import file from google drive, Pls find the data in share folder, and change the user name, foe example from iSith to your user
  for(i in 1: ntrt){        
  
          for(j in 1: nrep){ 
@@ -77,7 +78,7 @@ nsheet <- length(sheet)
          
          data <- loadWorkbook(file[i]) # load excel file 
         ## one excel file composed of 4 sheets of data
-        # load data sheet 1 the injuries on leave and tiller or hill ,combine and merge all the data
+        # load data sheet 1 the injuries on leave and tiller or hill, combine and merge all the data
          data.sheet1 <- readWorksheet(data, sheet = sheet[1], startRow = 2, endCol = 41)
         
          data.sheet1[is.na(data.sheet1)] <- 0                            
