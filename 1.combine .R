@@ -26,27 +26,24 @@ source("Functions/function.audpc.R")
 #### End load functions #####
 
 #### Specify variables, the treatment, replication and name of sheets we have ####
-trt <- c("FP", "PR", "RP", "GM21","GM22") # treatements
+trt <- c("FP", "PR", "RP", "GM") # treatements
 rep <- c("R1", "R2", "R3", "R4") # replications
 sheet <- c("sheet1", "sheet2", "sheet3", "sheet4") # Excel Sheet
 
 # Select the country you are inquring
-country <- "Philippines"
+#country <- "Philippines"
 # country <- "Indonesia" # not available
 # country <- "India" # not available
 # country <- "Vietnam" # not available
 # country <- "Thailand" # not available
 
 #season <- "WS2013" # not available
-season <- "DS2013"
+#season <- "DS2013"
 #season <- "WS2014" # not available
 #season <- "DS2014" # not available
-#season <- "WS2015" # not avialble
-#season <- "DS2014" # not available
+#season <- "2015WS" # not avialble
+season <- "2015DS" # not available
 
-#trt <- c("GM21")
-#rep <- c("R1","R2", "R3", "R4")
-#sheet <- c("sheet4")
 
 ntrt <- length(trt) # number of tretment
 nrep <- length(rep) # number of replication
@@ -60,21 +57,17 @@ nsheet <- length(sheet) # number of data sheet in one file
  data.all.sheet4 <- list() # strore the data sheet4 of all file in the lists
 
 # Import file from google drive, Pls find the data in share folder, and change the user name, foe example from iSith to your user
- for(i in 1: ntrt){        
- 
-         for(j in 1: nrep){ 
+
                 
-<<<<<<< HEAD
-         file <- list.files(path = paste("/Users/iSith/Google Drive/SKEP2ProjectData/On Farm Trial/",
-                                         country,
-                                         "/",
+         file <- list.files(path = paste("E:/Google Drive/Data/SYT-SKEP/Onfarm/",
                                          season,
                                          sep = ""),
-                            pattern = "R.SKEPII.DS2013[[:graph:]]+.xlsx$",
+                            pattern = "SKEP[[:graph:]]+.xlsx$",
                             full.names = TRUE)
-=======
-         file <- list.files(path = paste("~/Google Drive/SKEP2ProjectData/On Farm Trial/", country, "/", season, sep = ""), pattern = "R.SKEPII.DS2014[[:graph:]]+.xlsx$", full.names = TRUE)
->>>>>>> FETCH_HEAD
+
+ for(i in 1: 16){        
+           
+      for(j in 1: nrep){ 
          
          data <- loadWorkbook(file[i]) # load excel file 
         ## one excel file composed of 4 sheets of data
@@ -83,16 +76,8 @@ nsheet <- length(sheet) # number of data sheet in one file
         
          data.sheet1[is.na(data.sheet1)] <- 0                            
          if( i == 1 )
-         data.all.sheet1[[j]] <- data.sheet1 
-         if( i == 2 )
-                 data.all.sheet1[[4+j]] <- data.sheet1 
-         if( i == 3 )
-                 data.all.sheet1[[8+j]] <- data.sheet1
-         if( i == 4 )
-                 data.all.sheet1[[12+j]] <- data.sheet1
-         if( i == 5 )
-                 data.all.sheet1[[16+j]] <- data.sheet1
-                          
+         data.all.sheet1[[i]] <- data.sheet1 
+
          # load data sheet2 the systemic injuires such as viral disease , and hopperburn caused by brown planthopper , save as list
          data.sheet2<- readWorksheet(data, sheet = sheet[2],
                                       startRow =  2)

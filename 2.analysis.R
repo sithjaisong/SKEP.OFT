@@ -89,7 +89,7 @@ if(sheet1$WS == 1 & sheet1$DVS == "100"){  # if WS = 1 at harvest stage
 ######----- Analysis sheet 1 leave and tiller injuries-----######
 
 ## add more 
-sum.sheet1 <- sheet1 %.% 
+sum.sheet1 <- sheet1 %>% 
   # add the new column to store the variables converted to percent            
   mutate(Nlh = Nt*Nlt, # Number of leave = number of tiller * number of leave per tiller
                          # tiller injuries
@@ -119,9 +119,9 @@ sum.sheet1 <- sheet1 %.%
                          LS.percent = LS/Nlh*100, # Percent of leaf scald in one hill
                          NBS.percent = NBS/Nlh*100, # Percent of Narrow brown spot in one hill
                          RS.percent = RS/Nlh*100 # Percent of Red stripe in one hill
-                          ) %.%
+                          ) %>%
   # group the variable such as season, year , teatment, rep and DVS
-  group_by(season, year ,treatment, rep, DVS) %.%
+  group_by(season, year ,treatment, rep, DVS) %>%
   
   
   summarise(m.LF = mean(LF.percent), # mean within DVS which is following the designed group
@@ -134,7 +134,7 @@ sum.sheet1 <- sheet1 %.%
             m.LB = mean(LB.percent),
             m.LS = mean(LS.percent),
             m.NBS = mean(NBS.percent),
-            m.RS = mean(RS.percent)) %.%
+            m.RS = mean(RS.percent)) %>%
 
   ### AUDPC # the functions from the agricolae is bugs for this format
 # this part is to apply the function to computate the audpc of eheach variables 
@@ -150,6 +150,9 @@ sum.sheet1 <- sheet1 %.%
             NBS.audpc = audpc(m.NBS, DVS),
             RS.audpc = audpc(m.RS, DVS))
 
+#n.data <- melt(as.data.frame(sum.sheet1), id = c("season","year", "treatment", "rep" ))
+
+#ggplot(n.data, aes(x = treatment, y = value)) + geom_boxplot() + facet_wrap(~ variable, ncol = 3)
 
 ######----- Analysis sheet 2 systemic injuies-----######
 # select the maximum percent of mean along the time of experiment
